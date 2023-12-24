@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
@@ -25,9 +26,13 @@ export class PersonController {
     return this.personService.findAll();
   }
 
+  @Get('find')
+  query(@Query('name') name: string, @Query('age') age: number) {
+    return `received: name=${name},age=${age}`;
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `recive id ${id}`;
     return this.personService.findOne(+id);
   }
 
