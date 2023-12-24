@@ -28,7 +28,7 @@ export class PersonController {
 
   @Get('find')
   query(@Query('name') name: string, @Query('age') age: number) {
-    return `received: name=${name},age=${age}`;
+    return `received: name=${name},age=${age} ggg`;
   }
 
   @Get(':id')
