@@ -7,9 +7,11 @@ import { BbbModule } from './bbb/bbb.module';
 import { GlobalModule } from './global/global.module';
 import { LifeModule } from './life/life.module';
 import { AopModule } from './aop/aop.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { Global2Guard } from './global/global2.guard';
 import { Time4Interceptor } from './global/time4.interceptor';
+import { Global2Pipe } from './global/global2.pipe';
+import { Global2Filter } from './global/global2.filter';
 
 @Module({
   imports: [
@@ -56,6 +58,14 @@ import { Time4Interceptor } from './global/time4.interceptor';
     {
       provide: APP_INTERCEPTOR,
       useClass: Time4Interceptor,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: Global2Pipe,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: Global2Filter,
     },
   ],
 })

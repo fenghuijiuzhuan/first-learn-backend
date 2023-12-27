@@ -8,6 +8,9 @@ import {
   Delete,
   UseGuards,
   UseInterceptors,
+  Query,
+  UsePipes,
+  UseFilters,
 } from '@nestjs/common';
 import { AopService } from './aop.service';
 import { CreateAopDto } from './dto/create-aop.dto';
@@ -15,9 +18,15 @@ import { UpdateAopDto } from './dto/update-aop.dto';
 import { LoginGuard } from './login/login.guard';
 import { TimeInterceptor } from './time.interceptor';
 import { Time2Interceptor } from './time2.interceptor';
+import { ValidatePipe } from './validate.pipe';
+import { Validate2Pipe } from './validate2.pipe';
+import { TestFilter } from './test.filter';
+import { Test2Filter } from './test2.filter';
 
 @Controller('aop')
 @UseInterceptors(Time2Interceptor)
+@UsePipes(Validate2Pipe)
+@UseFilters(Test2Filter)
 export class AopController {
   constructor(private readonly aopService: AopService) {}
 
@@ -41,6 +50,12 @@ export class AopController {
   bbb() {
     console.log('aop bbb...');
     return 'aop bbb';
+  }
+
+  @Get('ccc')
+  @UseFilters(TestFilter)
+  ccc(@Query('num', ValidatePipe) num: number) {
+    return num + 1;
   }
 
   @Post()
