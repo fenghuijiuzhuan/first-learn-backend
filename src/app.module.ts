@@ -12,6 +12,8 @@ import { Global2Guard } from './global/global2.guard';
 import { Time4Interceptor } from './global/time4.interceptor';
 import { Global2Pipe } from './global/global2.pipe';
 import { Global2Filter } from './global/global2.filter';
+import { DecoratorModule } from './decorator/decorator.module';
+import { AaaController } from './aaa.controller';
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { Global2Filter } from './global/global2.filter';
     GlobalModule,
     LifeModule,
     AopModule,
+    DecoratorModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AaaController],
   providers: [
     {
       provide: 'app-service',
