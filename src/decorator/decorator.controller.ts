@@ -11,17 +11,31 @@ import {
   Headers,
   Ip,
   Session,
+  UseFilters,
 } from '@nestjs/common';
 import { DecoratorService } from './decorator.service';
 import { CreateDecoratorDto } from './dto/create-decorator.dto';
 import { UpdateDecoratorDto } from './dto/update-decorator.dto';
 import { AaaDto } from './dto/aaa.dto';
 import { DecoratorGuard } from './decorator.guard';
+import { ContextFilter } from './context/context.filter';
+import { AaaException } from './context/AaaException';
+import { ContextGuard } from './context/context.guard';
+import { Roles } from './context/role.decorator';
+import { Role } from './context/role';
 
 @Controller('api/decorator')
 @SetMetadata('roles', ['user'])
 export class DecoratorController {
   constructor(private readonly decoratorService: DecoratorService) {}
+
+  @Get('context')
+  @UseFilters(ContextFilter)
+  @UseGuards(ContextGuard)
+  @Roles(Role.Admin)
+  context(): string {
+    throw new AaaException('aaa', 'bbb');
+  }
 
   @Post('/aaa')
   aaa(@Body() aaa: AaaDto) {
