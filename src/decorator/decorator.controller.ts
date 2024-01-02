@@ -12,6 +12,8 @@ import {
   Ip,
   Session,
   UseFilters,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { DecoratorService } from './decorator.service';
 import { CreateDecoratorDto } from './dto/create-decorator.dto';
@@ -23,11 +25,57 @@ import { AaaException } from './context/AaaException';
 import { ContextGuard } from './context/context.guard';
 import { Roles } from './context/role.decorator';
 import { Role } from './context/role';
+import { CustomDecoratorGuard } from './custom-decorator/custom-decorator.guard';
+import { CustomDecorator } from './custom-decorator/custom-decorator.decorator';
+import { MergedDecorator } from './custom-decorator/merge-decorator.decorator';
+import { CustomParamDecorator } from './custom-decorator/param-decorator.decorator';
+import { MyHeaders } from './custom-decorator/headers.decorator';
+import { MyQuery } from './custom-decorator/query.decorator';
 
 @Controller('api/decorator')
 @SetMetadata('roles', ['user'])
 export class DecoratorController {
   constructor(private readonly decoratorService: DecoratorService) {}
+  @Get('query')
+  query(
+    @Query('aaa', new ParseIntPipe()) aaa,
+    @MyQuery('bbb', new ParseIntPipe()) bbb,
+  ) {
+    console.log('自定义query aaa', aaa);
+    console.log('自定义query bbb', bbb);
+    return '自定义Query装饰器';
+  }
+
+  @Get('headers')
+  headers(@Headers('Accept') a, @MyHeaders('Accept') b) {
+    console.log('headers', a);
+    console.log('myheaders', b);
+    return '自定义Headers装饰器';
+  }
+
+  @Get('param')
+  param(@CustomParamDecorator() a: string) {
+    return a;
+  }
+
+  @MergedDecorator('merged', 'merge')
+  merge(): string {
+    return '合并装饰器,效果与decorator和sample一样';
+  }
+
+  @Get('sample')
+  @CustomDecorator('sample')
+  @UseGuards(CustomDecoratorGuard)
+  customDecoratorSample(): string {
+    return 'custom-sample-decorator';
+  }
+
+  @Get('decorator')
+  @SetMetadata('custom-decorator', 'admin')
+  @UseGuards(CustomDecoratorGuard)
+  customDecorator(): string {
+    return this.decoratorService.findAll();
+  }
 
   @Get('context')
   @UseFilters(ContextFilter)
