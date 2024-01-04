@@ -15,6 +15,7 @@ import { Global2Filter } from './global/global2.filter';
 import { DecoratorModule } from './decorator/decorator.module';
 import { AaaController } from './aaa.controller';
 import { LoopDepModule } from './loop-dep/loop-dep.module';
+import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { LoopDepModule } from './loop-dep/loop-dep.module';
     AopModule,
     DecoratorModule,
     LoopDepModule,
+    DynamicModuleModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
