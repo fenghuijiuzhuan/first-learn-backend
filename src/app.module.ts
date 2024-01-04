@@ -14,6 +14,7 @@ import { Global2Pipe } from './global/global2.pipe';
 import { Global2Filter } from './global/global2.filter';
 import { DecoratorModule } from './decorator/decorator.module';
 import { AaaController } from './aaa.controller';
+import { LoopDepModule } from './loop-dep/loop-dep.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AaaController } from './aaa.controller';
     LifeModule,
     AopModule,
     DecoratorModule,
+    LoopDepModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
