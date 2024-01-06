@@ -16,6 +16,7 @@ import { DecoratorModule } from './decorator/decorator.module';
 import { AaaController } from './aaa.controller';
 import { LoopDepModule } from './loop-dep/loop-dep.module';
 import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
+import { RxjsModule } from './rxjs/rxjs.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
     DecoratorModule,
     LoopDepModule,
     DynamicModuleModule,
+    RxjsModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
@@ -70,10 +72,10 @@ import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
       provide: APP_PIPE,
       useClass: Global2Pipe,
     },
-    {
-      provide: APP_FILTER,
-      useClass: Global2Filter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: Global2Filter,
+    // },
   ],
 })
 export class AppModule {}
