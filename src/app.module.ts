@@ -18,6 +18,7 @@ import { LoopDepModule } from './loop-dep/loop-dep.module';
 import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
 import { RxjsModule } from './rxjs/rxjs.module';
 import { PipeModule } from './pipe/pipe.module';
+import { ExceptionModule } from './exception/exception.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PipeModule } from './pipe/pipe.module';
     DynamicModuleModule,
     RxjsModule,
     PipeModule,
+    ExceptionModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
