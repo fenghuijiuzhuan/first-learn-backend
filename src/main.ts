@@ -10,7 +10,9 @@ import { join } from 'path';
 console.log(session);
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  });
 
   app.use(
     session({
@@ -21,7 +23,7 @@ async function bootstrap() {
     }),
   );
 
-  // app.useStaticAssets('public', { prefix: '/static' });
+  app.useStaticAssets('public', { prefix: '/static' });
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.useStaticAssets(join(__dirname, '..', 'views'));

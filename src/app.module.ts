@@ -19,6 +19,7 @@ import { DynamicModuleModule } from './dynamic-module/dynamic-module.module';
 import { RxjsModule } from './rxjs/rxjs.module';
 import { PipeModule } from './pipe/pipe.module';
 import { ExceptionModule } from './exception/exception.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ExceptionModule } from './exception/exception.module';
     RxjsModule,
     PipeModule,
     ExceptionModule,
+    UploadModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
