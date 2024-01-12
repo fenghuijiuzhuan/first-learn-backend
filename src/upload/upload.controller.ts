@@ -1,6 +1,10 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
+  HttpException,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UploadedFiles,
@@ -14,6 +18,7 @@ import {
 } from '@nestjs/platform-express';
 import { storage } from './my-file-storage';
 import { SizePipe } from './size.pipe';
+import { MyFileValidator } from './my-file-validator';
 
 @Controller('api/upload')
 export class UploadController {
@@ -99,8 +104,7 @@ export class UploadController {
   }
 
   // 单个上传
-  // TODO 大小限制未生效
-  @Post('eee')
+  @Post('fff')
   @UseInterceptors(
     FileInterceptor('aaa', {
       dest: 'uploads',
@@ -108,6 +112,52 @@ export class UploadController {
   )
   uploadFileSize10k(
     @UploadedFile(SizePipe) file: Express.Multer.File,
+    @Body() body,
+  ) {
+    console.log('body', body);
+    console.log('file', file);
+  }
+
+  // 单个上传
+  @Post('ggg')
+  @UseInterceptors(
+    FileInterceptor('aaa', {
+      dest: 'uploads',
+    }),
+  )
+  uploadFileSize10kPng(
+    @UploadedFile(
+      new ParseFilePipe({
+        exceptionFactory: (err) => {
+          throw new HttpException('xxx' + err, 404);
+        },
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 10 * 1024 }),
+          new FileTypeValidator({ fileType: 'image/png' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() body,
+  ) {
+    console.log('body', body);
+    console.log('file', file);
+  }
+
+  // 单个上传
+  @Post('hhh')
+  @UseInterceptors(
+    FileInterceptor('aaa', {
+      dest: 'uploads',
+    }),
+  )
+  uploadFileSize10kCustonValidator(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MyFileValidator({})],
+      }),
+    )
+    file: Express.Multer.File,
     @Body() body,
   ) {
     console.log('body', body);
