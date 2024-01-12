@@ -15,8 +15,7 @@ export class Global2Guard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('guard global2 check');
-    console.log('guard global2 check', this.appService.getHello());
+    // console.log('guard global2 check', this.appService.getHello());
 
     return true;
   }

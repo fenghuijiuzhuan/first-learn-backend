@@ -12,7 +12,7 @@ export class Time4Interceptor implements NestInterceptor {
     const startTime = Date.now();
     return next.handle().pipe(
       tap(() => {
-        console.log('interceptor global time4:', Date.now() - startTime);
+        // console.log('interceptor global time4:', Date.now() - startTime);
       }),
     );
   }

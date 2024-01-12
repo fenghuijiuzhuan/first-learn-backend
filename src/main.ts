@@ -31,9 +31,9 @@ async function bootstrap() {
 
   app.use(function (req: Request, res: Response, next: NextFunction) {
     // 全局中间件
-    console.log('before', req.url);
+    // console.log('before', req.url);
     next();
-    console.log('after');
+    // console.log('after');
   });
 
   app.useGlobalPipes(new GlobalPipe());
