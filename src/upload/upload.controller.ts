@@ -2,10 +2,12 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   HttpException,
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UploadedFiles,
   UseInterceptors,
@@ -19,6 +21,7 @@ import {
 import { storage } from './my-file-storage';
 import { SizePipe } from './size.pipe';
 import { MyFileValidator } from './my-file-validator';
+import * as fs from 'fs';
 
 @Controller('api/upload')
 export class UploadController {
@@ -162,5 +165,61 @@ export class UploadController {
   ) {
     console.log('body', body);
     console.log('file', file);
+  }
+
+  @Post('iii')
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      dest: 'uploads',
+    }),
+  )
+  uploadFIlesSlice(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() body,
+  ) {
+    console.log('body', body);
+    console.log('files', files);
+
+    const fileName = body.name.match(/(.+)\-\d$/)[1];
+    const chunkDir = 'uploads/chunks_' + fileName;
+
+    if (!fs.existsSync(chunkDir)) {
+      fs.mkdirSync(chunkDir);
+    }
+    fs.cpSync(files[0].path, chunkDir + '/' + body.name);
+    fs.rmSync(files[0].path);
+  }
+
+  @Get('merge')
+  merge(@Query('name') name: string) {
+    const chunkDir = 'uploads/chunks_' + name;
+    const files = fs.readdirSync(chunkDir);
+
+    let count = 0;
+    let startPos = 0;
+    files.map((file) => {
+      const filePath = chunkDir + '/' + file;
+      const stream = fs.createReadStream(filePath);
+      stream
+        .pipe(
+          fs.createWriteStream('uploads/' + name, {
+            start: startPos,
+          }),
+        )
+        .on('finish', () => {
+          count++;
+          if (count === files.length) {
+            fs.rm(
+              chunkDir,
+              {
+                recursive: true,
+              },
+              () => {},
+            );
+          }
+        });
+
+      startPos += fs.statSync(filePath).size;
+    });
   }
 }
