@@ -20,6 +20,7 @@ import { RxjsModule } from './rxjs/rxjs.module';
 import { PipeModule } from './pipe/pipe.module';
 import { ExceptionModule } from './exception/exception.module';
 import { UploadModule } from './upload/upload.module';
+import { LogModule } from './log/log.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UploadModule } from './upload/upload.module';
     PipeModule,
     ExceptionModule,
     UploadModule,
+    LogModule,
   ],
   controllers: [AppController, AaaController],
   providers: [
