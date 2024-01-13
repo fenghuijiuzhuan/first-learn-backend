@@ -1,6 +1,8 @@
 import { Controller, Get, Inject, Logger } from '@nestjs/common';
 import { MyLogger } from './MyLogger';
 import { MyLogger2 } from './MyLogger2';
+import { MyLogger as MyLogger3 } from './MyLogger3';
+import { WINSTON_LOGGER_TOKEN } from 'src/winston/winston.module';
 
 @Controller('log')
 export class LogController {
@@ -20,5 +22,22 @@ export class LogController {
 
     this.logger2.log('yyy', LogController.name);
     return 'hello log';
+  }
+
+  private logger3 = new MyLogger3();
+
+  @Get('winston')
+  winston() {
+    this.logger3.log('winston', LogController.name);
+    return 'winston';
+  }
+
+  @Inject(WINSTON_LOGGER_TOKEN)
+  private logger4;
+
+  @Get('aaa')
+  aaa() {
+    this.logger4.log('aaa', LogController.name);
+    return 'aaa';
   }
 }

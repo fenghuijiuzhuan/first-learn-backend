@@ -7,12 +7,15 @@ import { Time3Interceptor } from './global/time3.interceptor';
 import { GlobalPipe } from './global/global.pipe';
 import * as session from 'express-session';
 import { join } from 'path';
+import { WINSTON_LOGGER_TOKEN } from './winston/winston.module';
 console.log(session);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   });
+
+  app.useLogger(app.get(WINSTON_LOGGER_TOKEN));
 
   app.use(
     session({

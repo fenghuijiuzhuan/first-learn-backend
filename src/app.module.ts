@@ -21,6 +21,10 @@ import { PipeModule } from './pipe/pipe.module';
 import { ExceptionModule } from './exception/exception.module';
 import { UploadModule } from './upload/upload.module';
 import { LogModule } from './log/log.module';
+import { WinstonModule } from './winston/winston.module';
+import { format, transports } from 'winston';
+import * as chalk from 'chalk';
+import 'winston-daily-rotate-file';
 
 @Module({
   imports: [
@@ -38,6 +42,28 @@ import { LogModule } from './log/log.module';
     ExceptionModule,
     UploadModule,
     LogModule,
+    WinstonModule.forRoot({
+      level: 'debug',
+      transports: [
+        new transports.Console({
+          format: format.combine(
+            format.colorize(),
+            format.printf(({ context, level, message, time }) => {
+              const appStr = chalk.green(`[NEST]`);
+              const contextStr = chalk.yellow(`[${context}]`);
+              return `${appStr} ${time} ${level} ${contextStr} ${message}`;
+            }),
+          ),
+        }),
+        new transports.DailyRotateFile({
+          format: format.combine(format.timestamp(), format.json()),
+          filename: 'test-%DATE%.log',
+          datePattern: 'YYYY-MM-DD-HH-mm',
+          dirname: 'log',
+          maxSize: '10k',
+        }),
+      ],
+    }),
   ],
   controllers: [AppController, AaaController],
   providers: [
